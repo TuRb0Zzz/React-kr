@@ -1,0 +1,42 @@
+.App {
+  min-height: 100vh;
+}
+
+/* Стили для адаптивности */
+@media (max-width: 768px) {
+  .MuiContainer-root {
+    padding: 0 16px;
+  }
+}
+
+/* Кастомные стили для карточек */
+.technology-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.technology-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Стили для пустых состояний */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
