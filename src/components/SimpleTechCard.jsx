@@ -27,13 +27,41 @@ function SimpleTechCard({ technology, onStatusChange }) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, margin: 2 }} className="technology-card">
-      <CardContent>
-        <Typography variant="h5" component="h2" gutterBottom>
+    <Card sx={{ 
+      height: '100%',           // Занимаем всю высоту контейнера
+      display: 'flex',          // Flexbox для выравнивания
+      flexDirection: 'column',  // Вертикальное расположение
+    }}>
+      <CardContent sx={{ flexGrow: 1 }}> {/* Контент растягивается */}
+        <Typography 
+          variant="h6" 
+          component="h2" 
+          gutterBottom
+          sx={{ 
+            minHeight: '64px',  // Фиксированная высота заголовка
+            display: '-webkit-box',
+            WebkitLineClamp: 2,  // Максимум 2 строки
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+        >
           {technology.title}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography 
+          variant="body2" 
+          color="text.secondary" 
+          sx={{ 
+            mb: 2,
+            minHeight: '60px',  // Фиксированная высота описания
+            display: '-webkit-box',
+            WebkitLineClamp: 3,  // Максимум 3 строки
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+        >
           {technology.description}
         </Typography>
 
@@ -57,6 +85,7 @@ function SimpleTechCard({ technology, onStatusChange }) {
             size="small"
             variant="contained"
             onClick={() => onStatusChange(technology.id, 'completed')}
+            sx={{ flexGrow: 1 }}  // Растягиваем кнопки
           >
             Завершить
           </Button>
@@ -67,6 +96,7 @@ function SimpleTechCard({ technology, onStatusChange }) {
           variant="outlined"
           onClick={() => onStatusChange(technology.id,
             technology.status === 'in-progress' ? 'not-started' : 'in-progress')}
+          sx={{ flexGrow: 1 }}  // Растягиваем кнопки
         >
           {technology.status === 'in-progress' ? 'Приостановить' : 'Начать'}
         </Button>

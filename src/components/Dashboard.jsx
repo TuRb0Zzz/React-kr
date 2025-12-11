@@ -4,8 +4,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton,
-  Badge,
   Tabs,
   Tab,
   Card,
@@ -17,7 +15,6 @@ import {
   LinearProgress
 } from '@mui/material';
 import {
-  Notifications as NotificationsIcon,
   CheckCircle as CheckCircleIcon,
   Schedule as ScheduleIcon,
   TrendingUp as TrendingUpIcon
@@ -34,7 +31,6 @@ function TabPanel({ children, value, index }) {
 
 function Dashboard({ technologies, onStatusChange }) {
   const [tabValue, setTabValue] = useState(0);
-  const [notificationCount] = useState(3);
 
   const stats = {
     total: technologies.length,
@@ -60,11 +56,7 @@ function Dashboard({ technologies, onStatusChange }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Панель управления технологиями
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={notificationCount} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          {/* Убрали иконку уведомлений */}
         </Toolbar>
       </AppBar>
 

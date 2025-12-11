@@ -10,7 +10,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Box
+  Box,
+  Chip
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -21,9 +22,12 @@ function AddTechnology({ onAddTechnology }) {
     description: '',
     category: 'frontend',
     status: 'not-started',
-    notes: ''
+    notes: '',
+    resources: ''
   });
   
+  const [resourceInput, setResourceInput] = useState('');
+  const [resources, setResources] = useState([]);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -35,6 +39,17 @@ function AddTechnology({ onAddTechnology }) {
     }));
   };
 
+  const handleAddResource = () => {
+    if (resourceInput.trim()) {
+      setResources([...resources, resourceInput.trim()]);
+      setResourceInput('');
+    }
+  };
+
+  const handleRemoveResource = (index) => {
+    setResources(resources.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -43,16 +58,26 @@ function AddTechnology({ onAddTechnology }) {
       return;
     }
 
-    const newTech = onAddTechnology(formData);
+    const techData = {
+      ...formData,
+      resources: resources,
+      userResources: []
+    };
+
+    const newTech = onAddTechnology(techData);
     enqueueSnackbar('Технология успешно добавлена!', { variant: 'success' });
     
+    // Сброс формы
     setFormData({
       title: '',
       description: '',
       category: 'frontend',
       status: 'not-started',
-      notes: ''
+      notes: '',
+      resources: ''
     });
+    setResources([]);
+    setResourceInput('');
     
     navigate('/technologies');
   };
@@ -68,7 +93,7 @@ function AddTechnology({ onAddTechnology }) {
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="Название технологии *"
+              label="Название технологии"
               name="title"
               value={formData.title}
               onChange={handleChange}
@@ -78,7 +103,7 @@ function AddTechnology({ onAddTechnology }) {
             
             <TextField
               fullWidth
-              label="Описание *"
+              label="Описание"
               name="description"
               value={formData.description}
               onChange={handleChange}
@@ -101,6 +126,8 @@ function AddTechnology({ onAddTechnology }) {
                   <MenuItem value="backend">Backend</MenuItem>
                   <MenuItem value="database">Базы данных</MenuItem>
                   <MenuItem value="ui-library">UI Библиотеки</MenuItem>
+                  <MenuItem value="mobile">Мобильная разработка</MenuItem>
+                  <MenuItem value="devops">DevOps</MenuItem>
                   <MenuItem value="other">Другое</MenuItem>
                 </Select>
               </FormControl>
@@ -118,6 +145,42 @@ function AddTechnology({ onAddTechnology }) {
                   <MenuItem value="completed">Завершено</MenuItem>
                 </Select>
               </FormControl>
+            </Box>
+
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Ресурсы для изучения
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+                <TextField
+                  fullWidth
+                  placeholder="https://example.com/resource"
+                  value={resourceInput}
+                  onChange={(e) => setResourceInput(e.target.value)}
+                  size="small"
+                />
+                <Button
+                  variant="outlined"
+                  onClick={handleAddResource}
+                  disabled={!resourceInput.trim()}
+                >
+                  Добавить
+                </Button>
+              </Box>
+              
+              {resources.length > 0 && (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                  {resources.map((resource, index) => (
+                    <Chip
+                      key={index}
+                      label={resource.length > 30 ? resource.substring(0, 30) + '...' : resource}
+                      onDelete={() => handleRemoveResource(index)}
+                      color="primary"
+                      variant="outlined"
+                    />
+                  ))}
+                </Box>
+              )}
             </Box>
 
             <TextField
